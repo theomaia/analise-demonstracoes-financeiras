@@ -1,5 +1,5 @@
-// Exemplo da Aula 11: demonstrações ajustadas de 20X3, 20X4 e 20X5 (valores em R$ mil).
-const PERIODS = ['20X3', '20X4', '20X5'];
+// Dados de exemplo de uma empresa fictícia (valores em R$ mil).
+const PERIODS = ['2023', '2024', '2025'];
 
 const LINES = [
   ['Ativo circulante', 228340, 206226, 205632],
@@ -32,7 +32,7 @@ const LINES = [
   ['Capital social', 259716, 242726, 264530],
   ['Reservas de capital', 1424, 1210, null],
   ['Reservas de lucros', 44542, 40640, null],
-  ['Diferido - reclassificado', -26319, -29421, -14168],
+  ['Ajustes de avaliação patrimonial', -26319, -29421, -14168],
   ['Resultados acumulados', 6634, 4563, null],
   ['Total do passivo e patrimônio líquido', 355477, 317269, 306390],
   ['Receita operacional bruta', 456955, 445468, 355135],
@@ -54,7 +54,7 @@ const LINES = [
 
 export function sampleDataset() {
   return {
-    name: 'Exemplo da Aula 11 (R$ mil)',
+    name: 'Empresa Exemplo S.A. (R$ mil)',
     periods: [...PERIODS],
     rows: LINES.map(([label, ...vals]) => ({
       code: null,

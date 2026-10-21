@@ -154,7 +154,7 @@ function initUpload() {
   $('#btnSample').addEventListener('click', () => {
     const ds = sampleDataset();
     annotate(ds.rows);
-    loadDataset(ds, ['Exemplo da Aula 11: demonstrações ajustadas de 20X3 a 20X5, em R$ mil.']);
+    loadDataset(ds, ['Dados de exemplo de uma empresa fictícia, em R$ mil.']);
   });
   $('#btnManual').addEventListener('click', () => {
     loadDataset({ name: 'Preenchimento manual', periods: ['Ano 1', 'Ano 2'], rows: [] });

@@ -1,4 +1,4 @@
-// Verifica os cálculos com o exemplo da Aula 11 (node tests/verify.mjs).
+// Verifica os cálculos com os dados de exemplo (node tests/verify.mjs).
 import { sampleDataset } from '../js/sample.js';
 import { annotate, mapFields } from '../js/mapping.js';
 import { computeIndicators, computeDupont } from '../js/indicators.js';
@@ -50,14 +50,14 @@ check('ENV x3 (sem anterior)', v('ENV', 0) === null ? 0 : 1, 0);
 const dp = computeDupont(fields, 3)[2];
 check('DuPont ROE = RPL', dp.roe, v('RPL'), 1e-9);
 
-// Exemplo de prazos médios dos slides (PME 60, PMR 20, PMPF 27, ciclo financeiro 53)
+// Exemplo de prazos médios calculado à mão (PME 60, PMR 20, PMPF ≈ 26,7)
 const f2 = { estoques: [45000, 65000], fornecedores: [24000, 28000], cpv: [null, 330000], receitaBruta: [null, 900000], contasReceber: [30000, 50000] };
-const ind2 = Object.fromEntries(computeIndicators(f2, ['20X6', '20X7'], { ...PARAM_DEFAULTS, pctVendasPrazo: 80 }).map((r) => [r.def.id, r]));
-check('PME slides', ind2.PMRE.values[1], 60);
-check('PMR slides', ind2.PMRV.values[1], 20);
-check('PMPF slides (≈27 no slide)', ind2.PMPC.values[1], 26000 * 360 / 350000, 1e-6);
-check('Giro estoque slides', ind2.GE.values[1], 6);
-check('Giro duplicatas slides', ind2.GDR.values[1], 18);
+const ind2 = Object.fromEntries(computeIndicators(f2, ['2024', '2025'], { ...PARAM_DEFAULTS, pctVendasPrazo: 80 }).map((r) => [r.def.id, r]));
+check('PME', ind2.PMRE.values[1], 60);
+check('PMR', ind2.PMRV.values[1], 20);
+check('PMPF', ind2.PMPC.values[1], 26000 * 360 / 350000, 1e-6);
+check('Giro dos estoques', ind2.GE.values[1], 6);
+check('Giro das duplicatas', ind2.GDR.values[1], 18);
 
 console.log(fails ? `\n${fails} falha(s)` : '\nTudo certo.');
 process.exit(fails ? 1 : 0);

@@ -1,4 +1,4 @@
-// Indicadores econômico-financeiros da Aula 11 (Análise das Demonstrações Financeiras).
+// Indicadores econômico-financeiros (análise das demonstrações financeiras).
 import { FIELD_BY_KEY } from './model.js';
 import { fmtNum, fmtInd } from './util.js';
 

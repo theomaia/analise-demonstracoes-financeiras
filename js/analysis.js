@@ -93,7 +93,7 @@ export function horizontal(rows, mode) {
       if (i === 0) return null;
       const b = mode === 'base' ? r.values[0] : r.values[i - 1];
       if (b === null || b === 0) return null;
-      if (v === null) return -100; // conta zerada no período ("-"), como na tabela da aula
+      if (v === null) return -100; // conta zerada no período ("-")
       return ((v - b) / b) * 100;
     }),
   }));

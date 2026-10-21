@@ -1,6 +1,6 @@
 # Análise de Demonstrações Financeiras
 
-Site estático que gera a análise das demonstrações financeiras de uma empresa a partir de um arquivo enviado pelo usuário, seguindo os indicadores da **Aula 11 — Análise das Demonstrações Financeiras** (Gestão Financeira e de Projetos).
+Site estático que gera a análise das demonstrações financeiras de uma empresa a partir de um arquivo enviado pelo usuário: análise vertical, horizontal e os principais indicadores econômico-financeiros.
 
 Tudo roda no navegador: nenhum arquivo é enviado a servidores.
 
@@ -14,7 +14,7 @@ Tudo roda no navegador: nenhum arquivo é enviado a servidores.
 - **Atividade (prazos médios)**: PMRV, PMRE, PMPC, ciclo operacional (COC), ciclo financeiro (CFC), giro dos estoques e das duplicatas.
 - **Gestão do capital de giro**: GIR, margem EBITDA, cobertura de dívidas, despesas financeiras/EBITDA, DBF, PMRAO, PMPPO, CFO.
 
-Cada indicador traz a fórmula, a leitura no formato da aula (“para cada R$ 1,00 de…”), a avaliação intrínseca (bom, atenção ou ruim), a tendência entre períodos e um campo opcional para comparar com a média do setor. O resumo destaca os indicadores mais relevantes para cada objetivo de análise (concessão de crédito, compra de ações, desempenho, capital de giro).
+Cada indicador traz a fórmula, uma leitura em linguagem simples (“para cada R$ 1,00 de…”), a avaliação intrínseca (bom, atenção ou ruim), a tendência entre períodos e um campo opcional para comparar com a média do setor. O resumo destaca os indicadores mais relevantes para cada objetivo de análise (concessão de crédito, compra de ações, desempenho, capital de giro).
 
 ## Formatos aceitos
 
@@ -45,7 +45,7 @@ Não há etapa de build. Sirva a pasta com qualquer servidor estático (módulos
 python -m http.server 8000
 ```
 
-Acesse http://localhost:8000. Para conferir os cálculos com os exemplos da aula:
+Acesse http://localhost:8000. Para conferir os cálculos com os dados de exemplo:
 
 ```bash
 node tests/verify.mjs
@@ -70,7 +70,7 @@ js/mapping.js         identificação das contas (código CVM ou nome)
 js/indicators.js      fórmulas, leituras e avaliações dos indicadores
 js/analysis.js        análises vertical e horizontal
 js/model.js           campos padronizados e planilha-modelo
-js/sample.js          exemplo numérico da aula (20X3–20X5)
+js/sample.js          dados de exemplo (empresa fictícia, 2023–2025)
 tests/verify.mjs      testes dos cálculos
 ```
 
