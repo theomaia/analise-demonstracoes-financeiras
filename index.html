@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Análise de Demonstrações Financeiras</title>
+  <meta name="description" content="Envie as demonstrações financeiras de uma empresa e obtenha análise vertical, horizontal e os indicadores de endividamento, liquidez, rentabilidade, prazos médios e capital de giro.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%232a78d6'/%3E%3Cpath d='M8 23V15M14 23V10M20 23V17M26 23V7' stroke='white' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="wrap topbar-inner">
+      <a class="brand" href="./" aria-label="Início">
+        <svg viewBox="0 0 32 32" width="28" height="28" aria-hidden="true"><rect width="32" height="32" rx="7" fill="var(--accent)"/><path d="M8 23V15M14 23V10M20 23V17M26 23V7" stroke="#fff" stroke-width="3" stroke-linecap="round"/></svg>
+        <span>Análise de DFs</span>
+      </a>
+      <nav class="steps" aria-label="Etapas">
+        <button class="step" data-go="upload" type="button"><b>1</b> Carregar</button>
+        <button class="step" data-go="review" type="button" disabled><b>2</b> Revisar dados</button>
+        <button class="step" data-go="results" type="button" disabled><b>3</b> Resultados</button>
+      </nav>
+      <button class="icon-btn" id="themeToggle" type="button" aria-label="Alternar tema claro/escuro" title="Alternar tema">
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="currentColor" d="M12 3a9 9 0 1 0 9 9c0-.46-.04-.92-.1-1.36a5.39 5.39 0 0 1-4.4 2.26 5.4 5.4 0 0 1-3.14-9.8c-.44-.06-.9-.1-1.36-.1z"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <!-- Etapa 1 -->
+    <section id="view-upload" class="view">
+      <div class="hero">
+        <h1>Análise das Demonstrações Financeiras</h1>
+        <p class="lead">Envie o balanço patrimonial e a DRE de uma empresa e gere a análise vertical, horizontal e os indicadores de endividamento, liquidez, rentabilidade, prazos médios e gestão do capital de giro.</p>
+      </div>
+
+      <label class="dropzone" id="dropzone" tabindex="0">
+        <input type="file" id="fileInput" multiple accept=".xlsx,.xls,.xlsm,.ods,.csv,.tsv,.txt,.pdf" hidden>
+        <svg viewBox="0 0 24 24" width="36" height="36" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" d="M12 16V4m0 0-4 4m4-4 4 4M4 16v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>
+        <strong>Arraste os arquivos aqui ou clique para escolher</strong>
+        <span class="muted">Excel (.xlsx, .xls), CSV ou PDF — pode enviar mais de um (ex.: BP e DRE separados)</span>
+      </label>
+      <p id="uploadStatus" class="status" role="status" aria-live="polite"></p>
+
+      <div id="companyPicker" class="card picker" hidden>
+        <label for="companyInput"><strong>O arquivo da CVM tem várias companhias.</strong> Escolha uma:</label>
+        <div class="row">
+          <input id="companyInput" list="companyList" placeholder="Digite o nome da companhia…" autocomplete="off">
+          <datalist id="companyList"></datalist>
+          <button class="btn primary" id="companyGo" type="button">Analisar</button>
+        </div>
+      </div>
+
+      <div class="actions-row">
+        <button class="btn" id="btnSample" type="button">Usar o exemplo da aula</button>
+        <button class="btn" id="btnTemplate" type="button">Baixar planilha-modelo (.xlsx)</button>
+        <button class="btn" id="btnManual" type="button">Preencher manualmente</button>
+      </div>
+
+      <div class="grid-3 info">
+        <div class="card">
+          <h3>Planilhas</h3>
+          <p>Uma coluna com o nome das contas e uma coluna de valores por ano. Os nomes das contas são reconhecidos automaticamente; a <a href="#" id="linkTemplate">planilha-modelo</a> garante o melhor resultado.</p>
+        </div>
+        <div class="card">
+          <h3>Dados abertos da CVM</h3>
+          <p>Para companhias abertas, use os CSVs da <a href="https://dados.cvm.gov.br/dataset/cia_aberta-doc-dfp" target="_blank" rel="noopener">DFP no portal de dados abertos da CVM</a> (arquivos BPA, BPP, DRE e DFC_MI). Envie vários de uma vez.</p>
+        </div>
+        <div class="card">
+          <h3>PDF</h3>
+          <p>PDFs com texto selecionável são lidos por aproximação (colunas por ano). Sempre confira os valores na etapa de revisão. PDFs digitalizados (imagem) não são suportados.</p>
+        </div>
+      </div>
+      <p class="privacy">🔒 Os arquivos são processados apenas no seu navegador. Nada é enviado a servidores.</p>
+    </section>
+
+    <!-- Etapa 2 -->
+    <section id="view-review" class="view" hidden>
+      <div class="view-head">
+        <div>
+          <h1>Revisar dados</h1>
+          <p class="muted" id="reviewSummary"></p>
+        </div>
+        <button class="btn primary" id="btnAnalyze" type="button">Gerar análise →</button>
+      </div>
+      <div id="reviewWarnings"></div>
+
+      <div class="card">
+        <h2 class="h3">Períodos</h2>
+        <p class="muted small">Marque os períodos a analisar, em ordem cronológica (do mais antigo para o mais recente). Os nomes podem ser editados.</p>
+        <div id="periodList" class="period-list"></div>
+        <div class="row gap">
+          <button class="btn small" id="btnReverse" type="button">⇄ Inverter ordem</button>
+          <button class="btn small" id="btnAddPeriod" type="button">+ Adicionar período</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2 class="h3">Parâmetros</h2>
+        <div class="params">
+          <label>Vendas a prazo (% da receita bruta)<input type="number" min="0" max="100" step="1" id="pVendas"></label>
+          <label>Compras a prazo (% das compras)<input type="number" min="0" max="100" step="1" id="pCompras"></label>
+          <label>Dias do ano para prazos médios
+            <select id="pDias"><option value="360">360 (comercial)</option><option value="365">365</option></select>
+          </label>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2 class="h3">Contas identificadas</h2>
+        <p class="muted small">Edite qualquer valor (formato 1.234,56; negativos com “-”). <span class="req-dot"></span> = necessário para a maioria dos indicadores. A coluna “Origem” mostra a conta do arquivo usada.</p>
+        <div class="table-wrap"><table class="grid" id="reviewTable"></table></div>
+      </div>
+      <div class="view-foot">
+        <button class="btn" data-go="upload" type="button">← Trocar arquivo</button>
+        <button class="btn primary" id="btnAnalyze2" type="button">Gerar análise →</button>
+      </div>
+    </section>
+
+    <!-- Etapa 3 -->
+    <section id="view-results" class="view" hidden>
+      <div class="view-head">
+        <div>
+          <h1 id="resultsTitle">Resultados</h1>
+          <p class="muted" id="resultsSub"></p>
+        </div>
+        <div class="row gap no-print">
+          <button class="btn" data-go="review" type="button">← Editar dados</button>
+          <button class="btn" id="btnExcel" type="button">Baixar Excel</button>
+          <button class="btn" id="btnPrint" type="button">Imprimir / PDF</button>
+        </div>
+      </div>
+      <div class="tabs no-print" role="tablist" id="tabs">
+        <button role="tab" data-tab="resumo" type="button">Resumo</button>
+        <button role="tab" data-tab="indicadores" type="button">Indicadores</button>
+        <button role="tab" data-tab="dupont" type="button">DuPont</button>
+        <button role="tab" data-tab="vertical" type="button">Análise vertical</button>
+        <button role="tab" data-tab="horizontal" type="button">Análise horizontal</button>
+        <button role="tab" data-tab="dados" type="button">Dados</button>
+      </div>
+      <div id="tab-resumo" class="tab-panel"></div>
+      <div id="tab-indicadores" class="tab-panel"></div>
+      <div id="tab-dupont" class="tab-panel"></div>
+      <div id="tab-vertical" class="tab-panel"></div>
+      <div id="tab-horizontal" class="tab-panel"></div>
+      <div id="tab-dados" class="tab-panel"></div>
+    </section>
+  </main>
+
+  <footer class="wrap foot">
+    <p>Indicadores conforme a Aula 11 — Análise das Demonstrações Financeiras (Gestão Financeira e de Projetos). Ferramenta educacional: os resultados dependem da qualidade dos dados informados e não constituem recomendação de investimento ou crédito.</p>
+  </footer>
+
+  <div id="tooltip" class="tooltip" role="tooltip" hidden></div>
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
